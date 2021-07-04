@@ -1,0 +1,11 @@
+body {
+    margin: 1em;
+}
+
+div + div {
+    margin-top: 1em;
+}
+
+.color-red {
+    color: red;
+}
