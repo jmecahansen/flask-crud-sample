@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>CRUD-101 &bull; Perfil de usuario</title>
+        {% include "common/css.html" %}
+    </head>
+    <body>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-house"></i> <a href="/" title="Haz clic aquí para ir a la página de inicio">Inicio</a></li>
+            </ol>
+        </nav>
+        <hr>
+        <h1>Perfil de usuario</h1>
+        <hr>
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    <th scope="row">{{ data.user.user_id }}</th>
+                    <td>{{ data.user.user_name_first }}</td>
+                    <td>{{ data.user.user_name_last }}</td>
+                    <td>{{ data.user.user_phone }}</td>
+                    <td>{{ data.user.user_dni }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2>Ubicaciones</h2>
+        <table class="table table-striped">
+        {% if data.locations is defined %}
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Dirección</th>
+                    <th scope="col">Ciudad</th>
+                    <th scope="col">País</th>
+                    <th scope="col">Código postal</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data.locations %}
+                <tr>
+                    <th scope="row">{{ row.location_id }}</th>
+                    <td>{{ row.location_address }}</td>
+                    <td>{{ row.location_city }}</td>
+                    <td>{{ row.location_country }}</td>
+                    <td>{{ row.location_zip }}</td>
+                    <td>{{ row.user_dni }}</td>
+                    <td>
+                        <a class="btn btn-secondary" href="/users/{{ row.user_id }}/locations/{{ row.location_id }}/edit" title="Haz clic aquí para editar la ubicación"><i class="bi bi-pencil"></i></a>
+                        <button class="action-delete btn btn-danger" data-location-id="{{ row.location_id }}" data-target="location" data-user-id="{{ row.user_id }}" title="Haz clic aquí para eliminar la ubicación"><i class="bi bi-eraser"></i></button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        {% else %}
+            <tbody>
+                <tr>
+                    <td>No has creado ninguna ubicación. ¡Haz clic <a href="/users/{{ row.user_id }}/locations/new">aquí</a> para crear una!</td>
+                </tr>
+            </tbody>
+        {% endif %}
+        </table>
+        <h2>Titulaciones</h2>
+        <table class="table table-striped">
+        {% if data.records is defined %}
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Título</th>
+                    <th scope="col">Año</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data.records %}
+                <tr>
+                    <th scope="row">{{ row.record_id }}</th>
+                    <td>{{ row.record_title }}</td>
+                    <td>{{ row.record_year }}</td>
+                    <td>
+                        <a class="btn btn-secondary" href="/users/{{ row.user_id }}/records/{{ row.record_id }}/edit" title="Haz clic aquí para editar la titulación"><i class="bi bi-pencil"></i></a>
+                        <button class="action-delete btn btn-danger" data-record-id="{{ row.record_id }}" data-target="record" data-user-id="{{ row.user_id }}" title="Haz clic aquí para eliminar la titulación"><i class="bi bi-eraser"></i></button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        {% else %}
+            <tbody>
+                <tr>
+                    <td>No has creado ninguna titulación. ¡Haz clic <a href="/users/{{ row.user_id }}/records/new">aquí</a> para crear una!</td>
+                </tr>
+            </tbody>
+        {% endif %}
+        </table>
+        <script src="{{url_for('static', filename='bootstrap.bundle.min.js')}}"></script>
+        <script src="{{url_for('static', filename='jquery-3.6.0.min.js')}}"></script>
+        <script>
+            $('.action_delete').on('click', function (e) {
+                target_prefix = $(this).data('target');
+                target_string = {
+                    'location': 'ubicación',
+                    'record': 'titulación'
+                }[target_prefix];
+
+                $.ajax({
+                    url: '/ajax/users',
+                    type: 'POST',
+                    data: {
+                        function: 'delete_user_' + target_prefix,
+                        user_id: $(this).data('user_id'),
+                        target_prefix + '_id': $(this).data(target_prefix + '_id'),
+                    }
+                }).done(function (response) {
+                    alert(response.success ? 'La ' + target_string + ' ha sido eliminada con éxito' : '¡Ups! No hemos podido eliminar la ' + target_string);
+                });
+            });
+        </script>
+    </body>
+</html>
