@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        {% include "common/css.html" %}
+    </head>
+    <body>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item" aria-current="page"><i class="bi bi-house"></i> <a href="/" title="Haz clic aquí para ir a la página de inicio">Inicio</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people"></i> <a href="/users/{{ data.user_id }}">Usuarios</a></li>
+            </ol>
+        </nav>
+        <hr>
+        <h1>Editar ubicación</h1>
+        <hr>
+        <script src="{{url_for('static', filename='bootstrap.bundle.min.js')}}"></script>
+        <script src="{{url_for('static', filename='jquery-3.6.0.min.js')}}"></script>
+    </body>
+</html>
