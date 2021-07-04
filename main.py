@@ -15,7 +15,9 @@ db = db.DatabaseClass()
 # ruta: página de inicio
 @app.route("/")
 def list_users():
-    return render_template("main.html", data=db.get_users())
+    return render_template("main.html", data={
+        "users": db.get_users()
+    })
 
 
 # ruta: AJAX (usuarios)
@@ -51,6 +53,16 @@ def manage_user_requests():
     return response
 
 
+# ruta: perfil de usuario
+@app.route("/users/<int:user_id>/", methods=["GET", "POST"])
+def user_details(user_id):
+    return render_template("users/profile.html", data={k: v for k, v in {
+        "user": db.get_user(user_id),
+        "locations": db.get_user_locations(user_id),
+        "records": db.get_user_records(user_id)
+    }.items() if len(v) > 0})
+
+
 # ruta: editar usuario
 @app.route("/users/<int:user_id>/edit", methods=["GET", "POST"])
 def edit_user(user_id):
@@ -59,18 +71,30 @@ def edit_user(user_id):
     if len(form) > 0:
         db.update_user(user_id, form)
 
+    print(db.get_user(user_id))
+
     return render_template("users/edit.html", data=db.get_user(user_id))
 
 
 # ruta: editar ubicación de usuario
 @app.route("/users/<int:user_id>/locations/<int:record_id>/edit", methods=["GET", "POST"])
 def edit_user_location(user_id, location_id):
+    form = request.form.to_dict()
+
+    if len(form) > 0:
+        db.insert_user_location(user_id, list(form.values()))
+
     return render_template("users/locations/edit.html", data=db.get_user_location(user_id, location_id))
 
 
 # ruta: editar registro de usuario
 @app.route("/users/<int:user_id>/records/<int:record_id>/edit", methods=["GET", "POST"])
 def edit_user_record(user_id, record_id):
+    form = request.form.to_dict()
+
+    if len(form) > 0:
+        db.insert_user_record(user_id, list(form.values()))
+
     return render_template("users/records/edit.html", data=db.get_user_record(user_id, record_id))
 
 
