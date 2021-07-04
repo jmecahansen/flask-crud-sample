@@ -39,14 +39,14 @@ def manage_user_requests():
         elif form["function"] == "delete_user_location":
             if "user_id" in form.keys():
                 if "location_id" in form.keys():
-                    if db.delete_user_location(form["user_id"], form["location_id"]):
+                    if db.delete_user_location(form["location_id"]):
                         response = {
                             "success": True
                         }
         elif form["function"] == "delete_user_record":
             if "user_id" in form.keys():
                 if "record_id" in form.keys():
-                    if db.delete_user_record(form["user_id"], form["record_id"]):
+                    if db.delete_user_record(form["record_id"]):
                         response = {
                             "success": True
                         }
