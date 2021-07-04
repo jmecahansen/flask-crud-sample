@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>CRUD-101 &bull; Nuevo usuario</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='bootstrap-reboot.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='app.css')}}">
+</head>
+    <body>
+        <h1>Nuevo usuario</h1>
+        <hr>
+        <form accept-charset="UTF-8" autocomplete="off" class="needs-validation" method="POST" name="new_user">
+            <div class="col-3 col-xs-12">
+                <label for="user_name_first" class="form-label">Nombre <span class="color-red">*</span></label>
+                <div class="input-group has-validation">
+                    <input type="text" class="form-control" id="user_name_first" name="user_name_first" placeholder="p.ej.: Jose Luís" required>
+                    <div class="invalid-feedback">¡Debes escribir el nombre!</div>
+                </div>
+            </div>
+            <div class="col-3 col-xs-12">
+                <label for="user_name_last" class="form-label">Apellidos <span class="color-red">*</span></label>
+                <div class="input-group has-validation">
+                    <input type="text" class="form-control" id="user_name_last" name="user_name_last" placeholder="p.ej.: Martínez de Tejada" required>
+                    <div class="invalid-feedback">¡Debes escribir los apellidos!</div>
+                </div>
+            </div>
+            <div class="col-3 col-xs-12">
+                <label for="user_phone" class="form-label">Número de teléfono <span class="color-red">*</span></label>
+                <div class="input-group has-validation">
+                    <input type="text" class="form-control" id="user_phone" name="user_phone" placeholder="p.ej.: 628465712" required>
+                    <div class="invalid-feedback">¡Debes escribir el número de teléfono!</div>
+                </div>
+            </div>
+            <div class="col-3 col-xs-12">
+                <label for="user_dni" class="form-label">DNI <span class="color-red">*</span></label>
+                <div class="input-group has-validation">
+                    <input type="text" class="form-control" id="user_dni" name="user_dni" required>
+                    <div class="invalid-feedback">¡Debes escribir el DNI!</div>
+                </div>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">Crear usuario</button>
+                <button class="action-reset btn btn-secondary" type="reset">Borrar campos</button>
+                <hr>
+                <em>Todos los campos marcados con un asterisco (<span class="color-red">*</span>) son obligatorios</em>
+            </div>
+        </form>
+        <script src="{{url_for('static', filename='bootstrap.bundle.min.js')}}"></script>
+        <script src="{{url_for('static', filename='jquery-3.6.0.min.js')}}"></script>
+    </body>
+</html>
