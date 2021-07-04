@@ -9,7 +9,7 @@
         <h1><i class="bi bi-people"></i> Usuarios</h1>
         <hr>
         <table class="table table-striped">
-        {% if data.users is defined %}
+        {% if data.users %}
             <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -50,16 +50,37 @@
         </div>
         {% include "common/js.html" %}
         <script>
-            $('.action_delete').on('click', function (e) {
-                $.ajax({
-                    url: '/ajax/users',
-                    type: 'POST',
-                    data: {
-                        function: 'delete_user',
-                        user_id: $(this).data('user-id')
+            $('.action-delete').on('click', function (e) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Eliminar usuario',
+                    text: 'Esta acción no se puede deshacer. ¿Estás segur@?',
+                    showCancelButton: true,
+                    focusCancel: true,
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonText: 'Eliminar',
+                    confirmButtonColor: 'red'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/ajax/users',
+                            type: 'POST',
+                            data: {
+                                function: 'delete_user',
+                                user_id: $(this).data('user-id')
+                            }
+                        }).done(function (response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Eliminar usuario',
+                                    text: '¡El usuario ha sido eliminado con éxito!'
+                                }).then(() => {
+                                    window.location.reload();
+                                });
+                            }
+                        });
                     }
-                }).done(function (response) {
-                    alert(response.success ? 'El usuario ha sido eliminado con éxito' : '¡Ups! No hemos podido eliminar el usuario');
                 });
             });
         </script>
