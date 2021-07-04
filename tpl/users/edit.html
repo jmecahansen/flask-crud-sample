@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>CRUD-101 &bull; Editar usuario</title>
+        {% include "common/css.html" %}
+    </head>
+    <body>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-house"></i> <a href="/" title="Haz clic aquí para ir a la página de inicio">Inicio</a></li>
+            </ol>
+        </nav>
+        <hr>
+        <h1>Editar usuario</h1>
+        <hr>
+        <form accept-charset="UTF-8" autocomplete="off" class="needs-validation" method="POST" name="new_user">
+            <div class="col-3 col-xs-12">
+                <label for="user_name_first" class="form-label">Nombre <span class="color-red">*</span></label>
+                <div class="input-group has-validation">
+                    <input type="text" class="form-control" id="user_name_first" name="user_name_first" placeholder="p.ej.: Jose Luís" required value="{{ data.user_name_first }}">
+                    <div class="invalid-feedback">¡Debes escribir el nombre!</div>
+                </div>
+            </div>
+            <div class="col-3 col-xs-12">
+                <label for="user_name_last" class="form-label">Apellidos <span class="color-red">*</span></label>
+                <div class="input-group has-validation">
+                    <input type="text" class="form-control" id="user_name_last" name="user_name_last" placeholder="p.ej.: Martínez de Tejada" required value="{{ data.user_name_last }}">
+                    <div class="invalid-feedback">¡Debes escribir los apellidos!</div>
+                </div>
+            </div>
+            <div class="col-3 col-xs-12">
+                <label for="user_phone" class="form-label">Número de teléfono <span class="color-red">*</span></label>
+                <div class="input-group has-validation">
+                    <input type="text" class="form-control" id="user_phone" name="user_phone" placeholder="p.ej.: 628465712" required value="{{ data.user_phone }}">
+                    <div class="invalid-feedback">¡Debes escribir el número de teléfono!</div>
+                </div>
+            </div>
+            <div class="col-3 col-xs-12">
+                <label for="user_dni" class="form-label">DNI <span class="color-red">*</span></label>
+                <div class="input-group has-validation">
+                    <input type="text" class="form-control" id="user_dni" name="user_dni" required value="{{ data.user_dni }}">
+                    <div class="invalid-feedback">¡Debes escribir el DNI!</div>
+                </div>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">Guardar cambios</button>
+                <hr>
+                <em>Todos los campos marcados con un asterisco (<span class="color-red">*</span>) son obligatorios</em>
+            </div>
+        </form>
+        {% include "common/js.html" %}
+    </body>
+</html>
