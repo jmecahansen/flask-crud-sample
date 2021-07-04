@@ -6,7 +6,7 @@ import sqlite3
 import os
 
 
-#
+# database handling class
 class DatabaseClass:
     DB_FILE = "%s/db/app.sqlite3" % os.getcwd()
     SQL_FILE = "%s/db/tables.sql" % os.getcwd()
@@ -163,12 +163,13 @@ class DatabaseClass:
             "SELECT * FROM t_users_records WHERE record_id = ? AND user_id = ?;",
             [record_id, user_id]
         )
+        db_row = db_cursor.fetchone()
         return dict(zip([
             "record_id",
             "user_id",
             "record_title",
             "record_year",
-        ], list(db_cursor.fetchone()))) or {}
+        ], list(db_row))) if db_row is not None else {}
 
     def get_user_records(self, user_id):
         """
@@ -221,6 +222,11 @@ class DatabaseClass:
         return users
 
     def init_storage(self, conn):
+        """
+        initializes the database storage (creates all tables)
+        :param conn the database connection:
+        :return:
+        """
         db_cursor = conn.cursor()
 
         with open(self.SQL_FILE, "r") as sql_file:
@@ -229,6 +235,8 @@ class DatabaseClass:
             if len(sql_queries) > 0:
                 for sql_query in sql_queries:
                     db_cursor.execute(sql_query)
+
+                conn.commit()
 
             sql_file.close()
 
@@ -302,7 +310,27 @@ class DatabaseClass:
         db_cursor = db_conn.cursor()
         db_cursor.execute(
             "UPDATE t_users SET %s WHERE user_id = ?;" % ", ".join(list(map(lambda x: "%s = ?" % x, data.keys()))),
-            data + [user_id]
+            list(data.values()) + [user_id]
+        )
+        db_conn.commit()
+        return True if db_cursor.lastrowid is not None else False
+
+    def update_user_location(self, location_id, data):
+        db_conn = self.get_connection()
+        db_cursor = db_conn.cursor()
+        db_cursor.execute(
+            "UPDATE t_users_locations SET %s WHERE location_id = ?;" % ", ".join(list(map(lambda x: "%s = ?" % x, data.keys()))),
+            list(data.values()) + [location_id]
+        )
+        db_conn.commit()
+        return True if db_cursor.lastrowid is not None else False
+
+    def update_user_record(self, record_id, data):
+        db_conn = self.get_connection()
+        db_cursor = db_conn.cursor()
+        db_cursor.execute(
+            "UPDATE t_users_records SET %s WHERE record_id = ?;" % ", ".join(list(map(lambda x: "%s = ?" % x, data.keys()))),
+            list(data.values()) + [record_id]
         )
         db_conn.commit()
         return True if db_cursor.lastrowid is not None else False
