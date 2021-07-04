@@ -2,7 +2,7 @@
 <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>Title</title>
+        <title>CRUD-101 &bull; Nueva ubicación</title>
         {% include "common/css.html" %}
     </head>
     <body>
@@ -15,7 +15,38 @@
         <hr>
         <h1>Nueva ubicación</h1>
         <hr>
-        <script src="{{url_for('static', filename='bootstrap.bundle.min.js')}}"></script>
-        <script src="{{url_for('static', filename='jquery-3.6.0.min.js')}}"></script>
+        <form accept-charset="UTF-8" autocomplete="off" class="needs-validation" method="POST" name="new_user_location">
+            <div class="col-3 col-xs-12">
+                <label for="location_address" class="form-label">Dirección <span class="color-red">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="location_address" name="location_address" placeholder="p.ej.: C/ Jamón, 8" required>
+                </div>
+            </div>
+            <div class="col-3 col-xs-12">
+                <label for="location_city" class="form-label">Ciudad <span class="color-red">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="location_city" name="location_city" placeholder="p.ej.: Palma de Mallorca" required>
+                </div>
+            </div>
+            <div class="col-3 col-xs-12">
+                <label for="location_country" class="form-label">País <span class="color-red">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="location_country" name="location_country" placeholder="p.ej.: España" required>
+                </div>
+            </div>
+            <div class="col-3 col-xs-12">
+                <label for="location_zip" class="form-label">Código postal <span class="color-red">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="location_zip" name="location_zip" required>
+                </div>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">Crear ubicación</button>
+                <button class="action-reset btn btn-secondary" type="reset">Borrar campos</button>
+                <hr>
+                <em>Todos los campos marcados con un asterisco (<span class="color-red">*</span>) son obligatorios</em>
+            </div>
+        </form>
+        {% include "common/js.html" %}
     </body>
 </html>

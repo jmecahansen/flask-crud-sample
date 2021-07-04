@@ -2,10 +2,38 @@
 <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>Title</title>
+        <title>CRUD-101 &bull; Editar titulación</title>
         {% include "common/css.html" %}
     </head>
     <body>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item" aria-current="page"><i class="bi bi-house"></i> <a href="/" title="Haz clic aquí para ir a la página de inicio">Inicio</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-people"></i> <a href="/users/{{ data.user.user_id }}">Usuarios ({{ data.user.user_name_first }} {{ data.user.user_name_last }})</a></li>
+            </ol>
+        </nav>
+        <hr>
+        <h1>Editar titulación</h1>
+        <hr>
+        <form accept-charset="UTF-8" autocomplete="off" class="needs-validation" method="POST" name="edit_user_record">
+            <div class="col-3 col-xs-12">
+                <label for="record_title" class="form-label">Título <span class="color-red">*</span></label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="record_title" name="record_title" placeholder="p.ej.: Desarrollo de Aplicaciones Informáticas (DAI)" required value="{{ data.record.record_title }}">
+                </div>
+            </div>
+            <div class="col-3 col-xs-12">
+                <label for="record_year" class="form-label">Año <span class="color-red">*</span></label>
+                <div class="input-group">
+                    <input type="number" class="form-control" id="record_year" name="record_year" placeholder="p.ej.: 2018" required value="{{ data.record.record_year }}">
+                </div>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">Guardar cambios</button>
+                <hr>
+                <em>Todos los campos marcados con un asterisco (<span class="color-red">*</span>) son obligatorios</em>
+            </div>
+        </form>
         {% include "common/js.html" %}
     </body>
 </html>
