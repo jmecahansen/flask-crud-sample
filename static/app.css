@@ -1,9 +1,15 @@
+@charset "UTF-8";
+
 body {
     margin: 1em;
 }
 
 div + div {
     margin-top: 1em;
+}
+
+table tr td, table tr th {
+    vertical-align: middle;
 }
 
 .color-red {
