@@ -71,13 +71,11 @@ def edit_user(user_id):
     if len(form) > 0:
         db.update_user(user_id, form)
 
-    print(db.get_user(user_id))
-
     return render_template("users/edit.html", data=db.get_user(user_id))
 
 
 # ruta: editar ubicación de usuario
-@app.route("/users/<int:user_id>/locations/<int:record_id>/edit", methods=["GET", "POST"])
+@app.route("/users/<int:user_id>/locations/<int:location_id>/edit", methods=["GET", "POST"])
 def edit_user_location(user_id, location_id):
     form = request.form.to_dict()
 
@@ -112,10 +110,10 @@ def new_user():
 # ruta: nueva ubicación de usuario
 @app.route("/users/<int:user_id>/locations/new", methods=["GET", "POST"])
 def new_user_location():
-    return render_template("new-user-location.html", data=[])
+    return render_template("users/locations/new.html", data=[])
 
 
 # ruta: nuevo registro de usuario
 @app.route("/users/<int:user_id>/records/new", methods=["GET", "POST"])
 def new_user_record():
-    return render_template("new-user-record.html", data=[])
+    return render_template("users/records/new.html", data=[])
