@@ -27,10 +27,9 @@ class DatabaseClass:
         db_conn.commit()
         return True if db_cursor.rowcount > 0 else False
 
-    def delete_user_location(self, user_id, location_id):
+    def delete_user_location(self, location_id):
         """
         deletes a specific user location
-        :param user_id: the user identifier
         :param location_id: the location identifier
         :return:
         """
@@ -38,16 +37,15 @@ class DatabaseClass:
         db_conn = self.get_connection()
         db_cursor = db_conn.cursor()
         db_cursor.execute(
-            "DELETE FROM t_users_locations WHERE location_id = ? AND user_id = ?;",
-            [user_id, location_id]
+            "DELETE FROM t_users_locations WHERE location_id = ?;",
+            location_id
         )
         db_conn.commit()
         return True if db_cursor.rowcount > 0 else False
 
-    def delete_user_record(self, user_id, record_id):
+    def delete_user_record(self, record_id):
         """
         deletes a specific user record
-        :param user_id: the user identifier
         :param record_id: the record identifier
         :return:
         """
@@ -55,10 +53,11 @@ class DatabaseClass:
         db_conn = self.get_connection()
         db_cursor = db_conn.cursor()
         db_cursor.execute(
-            "DELETE FROM t_users_records WHERE record_id = ? AND user_id = ?;",
-            [user_id, record_id]
+            "DELETE FROM t_users_records WHERE record_id = ?;",
+            record_id
         )
         db_conn.commit()
+        print(db_cursor.rowcount)
         return True if db_cursor.rowcount > 0 else False
 
     def get_connection(self):
@@ -69,6 +68,7 @@ class DatabaseClass:
 
         db_conn = sqlite3.connect(self.DB_FILE) or None
         db_cursor = db_conn.cursor()
+        db_cursor.execute("PRAGMA foreign_keys = ON;")
         db_cursor.execute("SELECT name FROM sqlite_master WHERE type ='table' AND name NOT LIKE 'sqlite_%';")
 
         if len(db_cursor.fetchall()) == 0:
