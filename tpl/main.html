@@ -3,15 +3,13 @@
     <head>
         <meta charset="UTF-8">
         <title>CRUD-101 &bull; Página principal</title>
-        <link rel="stylesheet" href="{{url_for('static', filename='bootstrap-reboot.min.css')}}">
-        <link rel="stylesheet" href="{{url_for('static', filename='bootstrap.min.css')}}">
-        <link rel="stylesheet" href="{{url_for('static', filename='app.css')}}">
+        {% include "common/css.html" %}
     </head>
     <body>
-        <h1>Usuarios</h1>
+        <h1><i class="bi bi-people"></i> Usuarios</h1>
         <hr>
         <table class="table table-striped">
-        {% if data.users %}
+        {% if data.users is defined %}
             <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -19,6 +17,7 @@
                     <th scope="col">Apellidos</th>
                     <th scope="col">Número de teléfono</th>
                     <th scope="col">DNI</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -29,6 +28,11 @@
                     <td>{{ row.user_name_last }}</td>
                     <td>{{ row.user_phone }}</td>
                     <td>{{ row.user_dni }}</td>
+                    <td>
+                        <a class="btn btn-secondary" href="/users/{{ row.user_id }}/" title="Haz clic aquí para ver el perfil de este usuario"><i class="bi bi-zoom-in"></i></a>
+                        <a class="btn btn-secondary" href="/users/{{ row.user_id }}/edit" title="Haz clic aquí para editar este usuario"><i class="bi bi-pencil"></i></a>
+                        <button class="action-delete btn btn-danger" data-user-id="{{ row.user_id }}" title="Haz clic aquí para eliminar este usuario"><i class="bi bi-eraser"></i></button>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -40,8 +44,11 @@
             </tbody>
         {% endif %}
         </table>
-        <script src="{{url_for('static', filename='bootstrap.bundle.min.js')}}"></script>
-        <script src="{{url_for('static', filename='jquery-3.6.0.min.js')}}"></script>
+        <div class="col-12">
+            <hr>
+            <a class="btn btn-primary" href="/users/new">Nuevo usuario</a>
+        </div>
+        {% include "common/js.html" %}
         <script>
             $('.action_delete').on('click', function (e) {
                 $.ajax({
@@ -49,7 +56,7 @@
                     type: 'POST',
                     data: {
                         function: 'delete_user',
-                        user_id: $(this).data('user_id')
+                        user_id: $(this).data('user-id')
                     }
                 }).done(function (response) {
                     alert(response.success ? 'El usuario ha sido eliminado con éxito' : '¡Ups! No hemos podido eliminar el usuario');
