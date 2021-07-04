@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>CRUD-101 &bull; Nuevo usuario</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='bootstrap-reboot.min.css')}}">
-    <link rel="stylesheet" href="{{url_for('static', filename='bootstrap.min.css')}}">
-    <link rel="stylesheet" href="{{url_for('static', filename='app.css')}}">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <title>CRUD-101 &bull; Nuevo usuario</title>
+        {% include "common/css.html" %}
+    </head>
     <body>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-house"></i> <a href="/" title="Haz clic aquí para ir a la página de inicio">Inicio</a></li>
+            </ol>
+        </nav>
+        <hr>
         <h1>Nuevo usuario</h1>
         <hr>
         <form accept-charset="UTF-8" autocomplete="off" class="needs-validation" method="POST" name="new_user">
