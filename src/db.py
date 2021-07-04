@@ -24,7 +24,7 @@ class DatabaseClass:
             "DELETE FROM t_users WHERE user_id = ?;",
             user_id
         )
-
+        db_conn.commit()
         return True if db_cursor.rowcount > 0 else False
 
     def delete_user_location(self, user_id, location_id):
@@ -41,7 +41,7 @@ class DatabaseClass:
             "DELETE FROM t_users_locations WHERE location_id = ? AND user_id = ?;",
             [user_id, location_id]
         )
-
+        db_conn.commit()
         return True if db_cursor.rowcount > 0 else False
 
     def delete_user_record(self, user_id, record_id):
@@ -58,7 +58,7 @@ class DatabaseClass:
             "DELETE FROM t_users_records WHERE record_id = ? AND user_id = ?;",
             [user_id, record_id]
         )
-
+        db_conn.commit()
         return True if db_cursor.rowcount > 0 else False
 
     def get_connection(self):
