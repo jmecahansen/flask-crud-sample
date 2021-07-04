@@ -22,7 +22,7 @@ class DatabaseClass:
         db_cursor = db_conn.cursor()
         db_cursor.execute(
             "DELETE FROM t_users WHERE user_id = ?;",
-            parameters=user_id
+            user_id
         )
 
         return True if db_cursor.rowcount > 0 else False
@@ -39,7 +39,7 @@ class DatabaseClass:
         db_cursor = db_conn.cursor()
         db_cursor.execute(
             "DELETE FROM t_users_locations WHERE location_id = ? AND user_id = ?;",
-            parameters=[user_id, location_id]
+            [user_id, location_id]
         )
 
         return True if db_cursor.rowcount > 0 else False
@@ -56,7 +56,7 @@ class DatabaseClass:
         db_cursor = db_conn.cursor()
         db_cursor.execute(
             "DELETE FROM t_users_records WHERE record_id = ? AND user_id = ?;",
-            parameters=[user_id, record_id]
+            [user_id, record_id]
         )
 
         return True if db_cursor.rowcount > 0 else False
@@ -85,6 +85,17 @@ class DatabaseClass:
 
         db_conn = self.get_connection()
         db_cursor = db_conn.cursor()
+        db_cursor.execute(
+            "SELECT * FROM t_users WHERE user_id = ?;",
+            str(user_id)
+        )
+        return dict(zip([
+            "user_id",
+            "user_name_first",
+            "user_name_last",
+            "user_phone",
+            "user_dni",
+        ], list(db_cursor.fetchone()))) or {}
 
     def get_user_location(self, user_id, location_id):
         """
@@ -96,6 +107,18 @@ class DatabaseClass:
 
         db_conn = self.get_connection()
         db_cursor = db_conn.cursor()
+        db_cursor.execute(
+            "SELECT * FROM t_users_locations WHERE location_id = ? AND user_id = ?;",
+            [location_id, user_id]
+        )
+        return dict(zip([
+            "location_id",
+            "user_id",
+            "location_address",
+            "location_city",
+            "location_country",
+            "location_zip",
+        ], list(db_cursor.fetchone()))) or {}
 
     def get_user_locations(self, user_id):
         """
@@ -106,6 +129,25 @@ class DatabaseClass:
 
         db_conn = self.get_connection()
         db_cursor = db_conn.cursor()
+        db_cursor.execute(
+            "SELECT * FROM t_users_locations WHERE user_id = ?;",
+            str(user_id)
+        )
+        db_rows = db_cursor.fetchall()
+        locations = []
+
+        if len(db_rows) > 0:
+            for row in db_rows:
+                locations.append(dict(zip([
+                    "location_id",
+                    "user_id",
+                    "location_address",
+                    "location_city",
+                    "location_country",
+                    "location_zip",
+                ], list(row))))
+
+        return locations
 
     def get_user_record(self, user_id, record_id):
         """
@@ -117,6 +159,16 @@ class DatabaseClass:
 
         db_conn = self.get_connection()
         db_cursor = db_conn.cursor()
+        db_cursor.execute(
+            "SELECT * FROM t_users_records WHERE record_id = ? AND user_id = ?;",
+            [record_id, user_id]
+        )
+        return dict(zip([
+            "record_id",
+            "user_id",
+            "record_title",
+            "record_year",
+        ], list(db_cursor.fetchone()))) or {}
 
     def get_user_records(self, user_id):
         """
@@ -127,6 +179,23 @@ class DatabaseClass:
 
         db_conn = self.get_connection()
         db_cursor = db_conn.cursor()
+        db_cursor.execute(
+            "SELECT * FROM t_users_records WHERE user_id = ?;",
+            str(user_id)
+        )
+        db_rows = db_cursor.fetchall()
+        records = []
+
+        if len(db_rows) > 0:
+            for row in db_rows:
+                records.append(dict(zip([
+                    "record_id",
+                    "user_id",
+                    "record_title",
+                    "record_year",
+                ], list(row))))
+
+        return records
 
     def get_users(self):
         """
@@ -137,7 +206,18 @@ class DatabaseClass:
         db_conn = self.get_connection()
         db_cursor = db_conn.cursor()
         db_cursor.execute("SELECT * FROM t_users;")
-        users = db_cursor.fetchall()
+        db_rows = db_cursor.fetchall()
+        users = []
+
+        for row in db_rows:
+            users.append(dict(zip([
+                "user_id",
+                "user_name_first",
+                "user_name_last",
+                "user_phone",
+                "user_dni",
+            ], list(row))))
+
         return users
 
     def init_storage(self, conn):
@@ -162,11 +242,16 @@ class DatabaseClass:
         db_conn = self.get_connection()
         db_cursor = db_conn.cursor()
         db_cursor.execute(
-            "INSERT INTO t_users VALUES (?, ?, ?, ?);",
-            parameters=data
+            """INSERT INTO t_users (
+                user_name_first,
+                user_name_last,
+                user_phone,
+                user_dni
+            ) VALUES (?, ?, ?, ?);""",
+            data
         )
-
-        return True if db_cursor.rowcount > 0 else False
+        db_conn.commit()
+        return True if db_cursor.lastrowid is not None else False
 
     def insert_user_location(self, user_id, data):
         """
@@ -179,11 +264,17 @@ class DatabaseClass:
         db_conn = self.get_connection()
         db_cursor = db_conn.cursor()
         db_cursor.execute(
-            "INSERT INTO t_users_locations VALUES (?, ?, ?, ?, ?);",
-            parameters=[user_id] + data
+            """INSERT INTO t_users_locations (
+                user_id,
+                location_address,
+                location_city,
+                location_country,
+                location_zip
+            ) VALUES (?, ?, ?, ?, ?);""",
+            [user_id] + data
         )
-
-        return True if db_cursor.rowcount > 0 else False
+        db_conn.commit()
+        return True if db_cursor.lastrowid is not None else False
 
     def insert_user_record(self, user_id, data):
         """
@@ -196,18 +287,22 @@ class DatabaseClass:
         db_conn = self.get_connection()
         db_cursor = db_conn.cursor()
         db_cursor.execute(
-            "INSERT INTO t_users_records VALUES (?, ?, ?, ?, ?);",
-            parameters=[user_id] + data
+            """INSERT INTO t_users_records (
+                user_id,
+                record_title,
+                record_year
+            ) VALUES (?, ?, ?);""",
+            [user_id] + data
         )
-
-        return True if db_cursor.rowcount > 0 else False
+        db_conn.commit()
+        return True if db_cursor.lastrowid is not None else False
 
     def update_user(self, user_id, data):
         db_conn = self.get_connection()
         db_cursor = db_conn.cursor()
         db_cursor.execute(
             "UPDATE t_users SET %s WHERE user_id = ?;" % ", ".join(list(map(lambda x: "%s = ?" % x, data.keys()))),
-            parameters=data + [user_id]
+            data + [user_id]
         )
-
-        return True if db_cursor.rowcount > 0 else False
+        db_conn.commit()
+        return True if db_cursor.lastrowid is not None else False
