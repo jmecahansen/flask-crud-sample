@@ -57,7 +57,6 @@ class DatabaseClass:
             record_id
         )
         db_conn.commit()
-        print(db_cursor.rowcount)
         return True if db_cursor.rowcount > 0 else False
 
     def get_connection(self):
